@@ -48,7 +48,7 @@ d3.select('#NodeContainer').selectAll('.newNodes')
         })
         .style('width', function(d){
             return d.width
-        })
+        }).exit();
 
 
 
