@@ -1,0 +1,28 @@
+{
+  "name": "d3_project",
+  "version": "1.0.0",
+  "description": "in class D3 Project",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/17WDWU07/D3-Project.git"
+  },
+  "keywords": [
+    "D3",
+    "Data",
+    "Vis"
+  ],
+  "author": "Richard Hpa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/17WDWU07/D3-Project/issues"
+  },
+  "homepage": "https://github.com/17WDWU07/D3-Project#readme",
+  "dependencies": {
+    "d3": "^4.13.0",
+    "jquery": "^3.3.1"
+  }
+}
