@@ -73,6 +73,10 @@ d3.json("js/ageWeight.json", function(error, jsonData){
         .domain([0, xMax])
         .range([0, width])
 
+    var color = d3.scaleLinear()
+        .domain([0, xMax/2, xMax])
+        .range(['#3498db', '#f1c40f','#e74c3c'])
+
     d3.select('body').append('svg')
         .attr('width', width)
         .attr('height', height)
@@ -81,13 +85,32 @@ d3.json("js/ageWeight.json", function(error, jsonData){
             .data(data)
             .enter().append('circle')
                 .classed('circle', true)
-                .style('fill', '#c0392b')
-                .attr('r', '5')
+                .style('fill', function(d, i){
+                    return color(d.weight)
+                })
+                .attr('r', '8')
                 .attr('cx', function(d){
                     return xScale(d.weight)
                 })
                 .attr('cy', function(d){
                     return height - yScale(d.age)
                 })
+                .on('mouseover', function(d){
+                    d3.select(this)
+                        .style('opacity', .5)
+                })
+                .on('mouseout', function(d){
+                    d3.select(this)
+                        .style('opacity', 1)
+                })
                 .exit()
+
+
+
+
+
+
+
+
+
 });
