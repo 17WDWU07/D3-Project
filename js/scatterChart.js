@@ -42,7 +42,7 @@
 // ];
 
 var data;
-d3.json("js/ageWeight.json", function(error, jsonData){
+d3.json("js/peopleInfo.json", function(error, jsonData){
     if(error){
         console.log("something has gone wrong");
         return;
@@ -55,12 +55,16 @@ d3.json("js/ageWeight.json", function(error, jsonData){
 
     var yMax = 0;
     var xMax = 0;
+    var xMin = 100000;
     for (var i = 0; i < data.length; i++) {
         if(data[i].age > yMax){
             yMax = data[i].age
         }
-        if(data[i].weight > xMax){
-            xMax = data[i].weight
+        if(data[i].anual_income > xMax){
+            xMax = data[i].anual_income
+        }
+        if(data[i].anual_income < xMin){
+            xMin = data[i].anual_income
         }
     }
 
@@ -70,7 +74,7 @@ d3.json("js/ageWeight.json", function(error, jsonData){
         .range([0, height])
 
     var xScale = d3.scaleLinear()
-        .domain([0, xMax])
+        .domain([xMin, xMax])
         .range([0, width])
 
     var color = d3.scaleLinear()
@@ -86,11 +90,11 @@ d3.json("js/ageWeight.json", function(error, jsonData){
             .enter().append('circle')
                 .classed('circle', true)
                 .style('fill', function(d, i){
-                    return color(d.weight)
+                    return color(d.anual_income)
                 })
                 .attr('r', '8')
                 .attr('cx', function(d){
-                    return xScale(d.weight)
+                    return xScale(d.anual_income)
                 })
                 .attr('cy', function(d){
                     return height - yScale(d.age)
@@ -102,6 +106,9 @@ d3.json("js/ageWeight.json", function(error, jsonData){
                 .on('mouseout', function(d){
                     d3.select(this)
                         .style('opacity', 1)
+                })
+                .on('click', function(d){
+                    console.log(d)
                 })
                 .exit()
 
