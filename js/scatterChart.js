@@ -49,9 +49,15 @@ d3.json("js/peopleInfo.json", function(error, jsonData){
     }
     data = jsonData;
 
+    var margin = {
+        top: 50,
+        right: 50,
+        bottom: 50,
+        left: 50
+    }
 
-    var height = 400,
-        width = 600;
+    var height = 400 - margin.top - margin.bottom,
+        width = 600 - margin.left - margin.right;
 
     var yMax = 0;
     var xMax = 0;
@@ -68,7 +74,6 @@ d3.json("js/peopleInfo.json", function(error, jsonData){
         }
     }
 
-
     var yScale = d3.scaleLinear()
         .domain([0, yMax])
         .range([0, height])
@@ -81,36 +86,81 @@ d3.json("js/peopleInfo.json", function(error, jsonData){
         .domain([0, xMax/2, xMax])
         .range(['#3498db', '#f1c40f','#e74c3c'])
 
-    d3.select('body').append('svg')
-        .attr('width', width)
-        .attr('height', height)
+
+
+    var Graph = d3.select('#NodeContainer').append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
         .style('background-color', '#7f8c8d')
-        .selectAll('circle')
-            .data(data)
-            .enter().append('circle')
-                .classed('circle', true)
-                .style('fill', function(d, i){
-                    return color(d.anual_income)
-                })
-                .attr('r', '8')
-                .attr('cx', function(d){
-                    return xScale(d.anual_income)
-                })
-                .attr('cy', function(d){
-                    return height - yScale(d.age)
-                })
-                .on('mouseover', function(d){
-                    d3.select(this)
-                        .style('opacity', .5)
-                })
-                .on('mouseout', function(d){
-                    d3.select(this)
-                        .style('opacity', 1)
-                })
-                .on('click', function(d){
-                    console.log(d)
-                })
-                .exit()
+        .append('g')
+        .attr('transform', 'translate('+margin.left+','+margin.top+')')
+            .selectAll('circle')
+                .data(data)
+                .enter().append('circle')
+                    .classed('circle', true)
+                    .style('fill', function(d, i){
+                        return color(d.anual_income)
+                    })
+                    .attr('r', '8')
+                    .attr('cx', 0)
+                    .attr('cy', height)
+                    .on('mouseover', function(d){
+                        d3.select(this)
+                            .style('opacity', .5)
+                    })
+                    .on('mouseout', function(d){
+                        d3.select(this)
+                            .style('opacity', 1)
+                    })
+                    .on('click', function(d){
+                        console.log(d)
+                    })
+
+
+
+                    Graph.transition()
+                        .attr('cx', function(d){
+                            return xScale(d.anual_income)
+                        })
+                        .attr('cy', function(d){
+                            return height - yScale(d.age)
+                        })
+                        .delay(function(d, i){
+                            return i * 20
+                        })
+                        .duration(1000)
+                        .ease(d3.easeBounce)
+
+
+
+
+                    var vGuideScale = d3.scaleLinear()
+                        .domain([0, yMax])
+                        .range([height, 0])
+
+                    var vAxis = d3.axisLeft(vGuideScale)
+                        .ticks(10)
+
+                    var vGuide = d3.select('svg').append('g')
+                    vAxis(vGuide)
+                    vGuide.attr('transform', 'translate('+margin.left+','+margin.top+')')
+
+
+
+
+                    var hGuideScale = d3.scaleLinear()
+                        .domain([0, xMax])
+                        .range([0, width])
+
+                    var hAxis = d3.axisBottom(hGuideScale)
+                        .ticks(10)
+
+                    var hGuide = d3.select('svg').append('g')
+                    hAxis(hGuide)
+                    hGuide.attr('transform', 'translate('+margin.left+','+(height + margin.top)+')')
+
+
+
 
 
 
